@@ -1,6 +1,11 @@
 const graphql = require('graphql');
 
-const { GraphQLObjectType, GraphQLString, GraphQLSchema } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLList
+} = graphql;
 
 const testData = [
   { name: 'Task 1', id: '01' },
@@ -34,6 +39,7 @@ const TeamMemberType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
+    
     task: {
       type: TaskType,
       args: { id: { type: GraphQLString }},
@@ -50,7 +56,20 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         return testDataMembers.filter( member => member.id == args.id)[0];
       }
+    },
+    allTasks: {
+      type: new GraphQLList(TaskType),
+      resolve (parent, args) {
+        return testData;
+      }
+    },
+    allTeamMembers: {
+      type: new GraphQLList(TeamMemberType),
+      resolve (parent, args) {
+        return testDataMembers;
+      }
     }
+
   }
 });
 
