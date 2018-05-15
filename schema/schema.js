@@ -6,7 +6,8 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema,
-  GraphQLList
+  GraphQLList,
+  GraphQLInt
 } = graphql;
 /*
 const testData = [
@@ -25,7 +26,10 @@ const TaskType = new GraphQLObjectType({
   name: 'Task',
   fields: () => ({
     id: { type: GraphQLString },
-    name: { type: GraphQLString }
+    name: { type: GraphQLString },
+    description: { type: GraphQLString },
+    dateCreated: { type: GraphQLString },
+    tags: { type: new GraphQLList(GraphQLString) }
   })
 });
 
@@ -88,23 +92,32 @@ const Mutation = new GraphQLObjectType({
 
     addTask: {
       type: TaskType,
-      args: { name: { type: GraphQLString }},
+      args: {
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        tags: { type: new GraphQLList(GraphQLString) }
+      },
       resolve(parent, args) {
         let task = new Task({
-          name: args.name
+          name: args.name,
+          description: args.description,
+          tags: args.tags
         });
-        return task.save()
+        return task.save();
       }
     },
     addTeamMember: {
       type: TeamMemberType,
-      args: { name: { type: GraphQLString}, title: { type: GraphQLString }},
+      args: {
+        name: { type: GraphQLString},
+        title: { type: GraphQLString }
+      },
       resolve(parent, args) {
         let teamMember = new TeamMember({
           name: args.name,
           title: args.title
         });
-        return teamMember.save()
+        return teamMember.save();
       }
     }
   }

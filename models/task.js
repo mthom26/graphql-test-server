@@ -4,7 +4,18 @@ const taskSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
-  }
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now()
+  },
+  tags: [{
+    type: String
+  }]
 }); 
 
 const Task = mongoose.model('Task', taskSchema);
